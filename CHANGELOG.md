@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.54](https://github.com/StanGirard/quivr/compare/v0.0.53...v0.0.54) (2023-08-08)
+
+
+### Features
+
+* add new chat page ([#890](https://github.com/StanGirard/quivr/issues/890)) ([c43e0c0](https://github.com/StanGirard/quivr/commit/c43e0c01c4ddcf0d97b9bb89784ff004fb7a0a79))
+
 ## [0.0.53](https://github.com/StanGirard/quivr/compare/v0.0.52...v0.0.53) (2023-08-07)
 
 
