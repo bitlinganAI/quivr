@@ -1,24 +1,45 @@
 import { Content, List, Root } from "@radix-ui/react-tabs";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import Button from "@/lib/components/ui/Button";
+import { useBrainContext } from "@/lib/context/BrainProvider/hooks/useBrainContext";
+
 import { BrainTabTrigger, PeopleTab } from "./components";
+import ConfirmationDeleteModal from "./components/Modals/ConfirmationDeleteModal";
 import { SettingsTab } from "./components/SettingsTab/SettingsTab";
 import { useBrainManagementTabs } from "./hooks/useBrainManagementTabs";
+
+
 
 export const BrainManagementTabs = (): JSX.Element => {
   const { t } = useTranslation(["translation", "config"]);
   const { selectedTab, setSelectedTab, brainId } = useBrainManagementTabs();
+  const { deleteBrain, setCurrentBrainId } = useBrainContext();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const router = useRouter();
 
   if (brainId === undefined) {
     return <div />;
   }
+
+  const handleDeleteBrain = (): void => {
+    void deleteBrain(brainId);
+    setCurrentBrainId(null);
+    router.push("/brains-management");
+    setIsDeleteModalOpen(false);
+  };
 
   return (
     <Root
       className="shadow-md min-h-[50%] dark:shadow-primary/25 hover:shadow-xl transition-shadow rounded-xl overflow-hidden bg-white dark:bg-black border border-black/10 dark:border-white/25 p-4 pt-10"
       defaultValue="settings"
     >
-      <List className="flex justify-between" aria-label={t("subtitle", { ns: "config" })}>
+      <List
+        className="flex justify-between"
+        aria-label={t("subtitle", { ns: "config" })}
+      >
         <BrainTabTrigger
           selected={selectedTab === "settings"}
           label={t("settings", { ns: "config" })}
@@ -50,6 +71,18 @@ export const BrainManagementTabs = (): JSX.Element => {
           <p>{t("comingSoon")}</p>
         </Content>
       </div>
+
+      <Button
+        className="px-20 py-2 bg-red-500 text-white rounded-md"
+        onClick={() => setIsDeleteModalOpen(true)}
+      >
+        Delete Brain
+      </Button>
+      <ConfirmationDeleteModal
+        isOpen={isDeleteModalOpen}
+        setOpen={setIsDeleteModalOpen}
+        onDelete={handleDeleteBrain}
+      />
     </Root>
   );
 };
